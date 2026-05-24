@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Xythera — Event Timeline | AWS Student Builder Group</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0a;--bg-card:#18181b;--text:#e4e4e7;--text-muted:#a1a1aa;--accent:#8b5cf6;--accent-dark:#7c3aed;--glow:#a78bfa;--border:#27272a}
+body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(10,10,10,0.8);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);z-index:100}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);font-weight:600;font-size:18px}
+.logo-text{font-family:"Space Grotesk",sans-serif;font-weight:600}
+.back-btn{padding:8px 20px;background:rgba(139,92,246,0.1);border:1px solid var(--accent);border-radius:50px;color:var(--accent);text-decoration:none;font-size:13px;font-weight:600;transition:all 0.3s}
+.back-btn:hover{background:rgba(139,92,246,0.2)}
+
+/* HERO */
+.page-hero{padding:120px 5% 60px;text-align:center;position:relative}
+.page-hero::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(circle,rgba(139,92,246,0.12),transparent 70%);pointer-events:none}
+.tag{display:inline-block;padding:8px 16px;background:rgba(139,92,246,0.1);border:1px solid var(--accent);border-radius:50px;color:var(--accent);font-size:12px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:20px}
+.page-hero h1{font-family:"Space Grotesk",sans-serif;font-size:clamp(40px,7vw,72px);font-weight:700;line-height:1.1;margin-bottom:16px;background:linear-gradient(135deg,#fff 0%,var(--glow) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.page-hero p{font-size:16px;color:var(--text-muted);max-width:560px;margin:0 auto;line-height:1.8}
+
+/* TIMELINE WRAPPER */
+.timeline-section{padding:20px 5% 100px;max-width:900px;margin:0 auto;position:relative}
+
+/* VERTICAL LINE */
+.timeline-track{position:relative;padding:20px 0}
+.timeline-track::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:2px;transform:translateX(-50%);background:linear-gradient(180deg,transparent,var(--accent) 10%,var(--accent) 90%,transparent);box-shadow:0 0 12px rgba(139,92,246,0.4)}
+
+/* TIMELINE ITEM */
+.tl-item{display:grid;grid-template-columns:1fr 60px 1fr;align-items:center;margin:0 0 40px}
+
+/* NODE */
+.tl-node{width:18px;height:18px;border-radius:50%;background:var(--accent);margin:0 auto;position:relative;z-index:2;box-shadow:0 0 0 5px rgba(139,92,246,0.2),0 0 20px rgba(139,92,246,0.7)}
+.tl-node::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(139,92,246,0.3);animation:nodePulse 2.5s ease-in-out infinite}
+@keyframes nodePulse{0%,100%{opacity:0.4;transform:scale(1)}50%{opacity:1;transform:scale(1.15)}}
+
+/* CARDS */
+.tl-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;transition:all 0.3s;position:relative;overflow:hidden}
+.tl-card::before{content:"";position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--accent),var(--glow));transform:scaleX(0);transition:transform 0.3s;transform-origin:left}
+.tl-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 24px rgba(139,92,246,0.15)}
+.tl-card:hover::before{transform:scaleX(1)}
+.tl-card.right:hover{transform:translateY(-3px)}
+.tl-spacer{}
+
+/* RIGHT-SIDE card aligns left col as spacer */
+.tl-item.right .tl-spacer{grid-column:1}
+.tl-item.right .tl-node{grid-column:2}
+.tl-item.right .tl-card{grid-column:3}
+.tl-item.left .tl-card{grid-column:1}
+.tl-item.left .tl-node{grid-column:2}
+.tl-item.left .tl-spacer{grid-column:3}
+
+.tl-time{font-size:11px;font-weight:600;letter-spacing:0.4px;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.tl-card h3{font-family:"Space Grotesk",sans-serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:6px}
+.tl-card p{font-size:13px;color:var(--text-muted);line-height:1.6}
+
+/* COLOR ACCENTS PER CARD */
+.tl-card.c-reg{border-left:3px solid #6366f1}
+.tl-card.c-ctf{border-left:3px solid #22c55e}
+.tl-card.c-lunch{border-left:3px solid #f59e0b}
+.tl-card.c-resume{border-left:3px solid #8b5cf6}
+.tl-card.c-prize{border-left:3px solid #ec4899}
+
+/* CTA */
+.cta-wrap{text-align:center;margin-top:60px}
+.cta-btn{display:inline-block;padding:16px 48px;background:linear-gradient(135deg,var(--accent),var(--accent-dark));border-radius:50px;color:#fff;text-decoration:none;font-family:"Space Grotesk",sans-serif;font-size:16px;font-weight:700;letter-spacing:0.3px;transition:all 0.3s;box-shadow:0 8px 32px rgba(139,92,246,0.4)}
+.cta-btn:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(139,92,246,0.6)}
+
+/* MOBILE */
+@media(max-width:768px){
+  .nav{padding:0 16px;height:64px}
+  .logo-text{font-size:14px}
+  .timeline-track::before{left:20px;transform:none}
+  .tl-item{grid-template-columns:40px 1fr;gap:12px;margin-bottom:24px}
+  .tl-item.left .tl-card,
+  .tl-item.right .tl-card{grid-column:2;grid-row:1}
+  .tl-item.left .tl-node,
+  .tl-item.right .tl-node{grid-column:1;grid-row:1;margin:0;margin-top:4px}
+  .tl-spacer{display:none}
+  .tl-card.c-reg,.tl-card.c-ctf,.tl-card.c-lunch,.tl-card.c-resume,.tl-card.c-prize{border-left-width:3px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" class="logo">
+    <img src="logo.jpg" style="width:36px;height:36px;border-radius:8px;object-fit:cover;" onerror="this.style.display='none'">
+    <span class="logo-text">AWS Student Builder Group</span>
+  </a>
+  <a href="index.html#events" class="back-btn">← Back to Home</a>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <p class="tag">Xythera CTF · May 30</p>
+  <h1>Event Timeline</h1>
+  <p>Full schedule for the 6-hour Capture The Flag event — check-in, challenge windows, lunch break, and prize distribution.</p>
+</section>
+
+<!-- TIMELINE -->
+<section class="timeline-section">
+  <div class="timeline-track">
+
+    <div class="tl-item left">
+      <div class="tl-card c-reg">
+        <p class="tl-time">9:00 AM – 10:00 AM</p>
+        <h3>Registration</h3>
+        <p>Participants check in, collect badges and kits, and get settled in.</p>
+      </div>
+      <span class="tl-node"></span>
+      <div class="tl-spacer"></div>
+    </div>
+
+    <div class="tl-item right">
+      <div class="tl-spacer"></div>
+      <span class="tl-node"></span>
+      <div class="tl-card c-ctf">
+        <p class="tl-time">10:00 AM – 1:00 PM</p>
+        <h3>CTF Begins</h3>
+        <p>Challenges go live. Teams start solving across all categories.</p>
+      </div>
+    </div>
+
+    <div class="tl-item left">
+      <div class="tl-card c-lunch">
+        <p class="tl-time">1:00 PM – 2:00 PM</p>
+        <h3>Lunch Break</h3>
+        <p>Competition paused. Participants take a well-earned break — meals provided.</p>
+      </div>
+      <span class="tl-node"></span>
+      <div class="tl-spacer"></div>
+    </div>
+
+    <div class="tl-item right">
+      <div class="tl-spacer"></div>
+      <span class="tl-node"></span>
+      <div class="tl-card c-resume">
+        <p class="tl-time">2:00 PM – 5:00 PM</p>
+        <h3>CTF Continues</h3>
+        <p>Competition resumes. Final push to solve remaining challenges.</p>
+      </div>
+    </div>
+
+    <div class="tl-item left">
+      <div class="tl-card c-prize">
+        <p class="tl-time">5:00 PM – 5:30 PM</p>
+        <h3>Prize Distribution</h3>
+        <p>Winners announced and prizes awarded. Closing remarks from the team.</p>
+      </div>
+      <span class="tl-node"></span>
+      <div class="tl-spacer"></div>
+    </div>
+
+  </div>
+
+  <div class="cta-wrap">
+    <a href="https://awsdsce.in/register" target="_blank" class="cta-btn">Register for Xythera →</a>
+  </div>
+</section>
+
+</body>
+</html>
