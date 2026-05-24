@@ -104,20 +104,22 @@
   @media (max-width: 768px) {
     .timeline-shell::before { left: 24px; transform: none; }
     .timeline-item {
-      grid-template-columns: 48px 1fr;
-      gap: 0.6rem;
+      display: block;
+      padding-left: 3.75rem;
       margin: 0.95rem 0;
     }
     .timeline-item > .timeline-card {
-      grid-column: 2;
+      width: 100%;
     }
     .timeline-node {
+      position: absolute;
+      left: 24px;
+      top: 1.4rem;
+      transform: translateX(-50%);
       margin: 0;
-      margin-left: 16px;
-      grid-column: 1;
     }
     .timeline-card-right,
-    .timeline-card-left { grid-column: 2; }
+    .timeline-card-left { grid-column: auto; }
     .timeline-spacer { display: none; }
   }
 </style>
